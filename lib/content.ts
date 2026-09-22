@@ -68,16 +68,26 @@ export const personalFilms = {
   emphasis: "just for you.",
   introduction: "Some feelings needed more than a photograph, Bubu.",
   soundNote: "Sound starts off. Tap the speaker in the player for music.",
-  videos: [18, 14, 27, 21, 62, 24, 24, 15, 15, 15, 15, 30].map((seconds, index) => {
-    const id = String(index + 1).padStart(2, "0");
-    return {
-      id,
-      title: `A little us · ${id}`,
-      src: `/videos/video-${id}.mp4`,
-      poster: `/videos/video-${id}.webp`,
-      duration: `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`,
-    };
-  }),
+  // video-07 was the same clip as video-06, so it is left out on purpose.
+  videos: [
+    { id: "01", seconds: 18 },
+    { id: "02", seconds: 14 },
+    { id: "03", seconds: 27 },
+    { id: "04", seconds: 21 },
+    { id: "05", seconds: 62 },
+    { id: "06", seconds: 24 },
+    { id: "08", seconds: 15 },
+    { id: "09", seconds: 15 },
+    { id: "10", seconds: 15 },
+    { id: "11", seconds: 15 },
+    { id: "12", seconds: 30 },
+  ].map(({ id, seconds }) => ({
+    id,
+    title: `A little us · ${id}`,
+    src: `/videos/video-${id}.mp4`,
+    poster: `/videos/video-${id}.webp`,
+    duration: `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`,
+  })),
 };
 
 export const oldMemories = {
