@@ -34,6 +34,7 @@ export function BirthdayChapter({ open, onOpenChange, onCloseFocus, motionOff, o
   const surface = useRef<HTMLDivElement | null>(null);
   const letterPaper = useRef<HTMLElement | null>(null);
   const wasOpen = useRef(false);
+  const previousWish = useRef(false);
 
   useEffect(() => {
     if (open && !wasOpen.current) {
@@ -82,6 +83,13 @@ export function BirthdayChapter({ open, onOpenChange, onCloseFocus, motionOff, o
       title.current?.focus({ preventScroll: true });
     }
   }, [lightsOn, step]);
+  useEffect(() => {
+    if (wished && !previousWish.current && open && step === 1) {
+      surface.current?.scrollTo({ top: 0, behavior: motionOff ? "instant" : "smooth" });
+      title.current?.focus({ preventScroll: true });
+    }
+    previousWish.current = wished;
+  }, [wished, open, step, motionOff]);
   useEffect(() => {
     if (!open || step !== 2 || !letterOpened) return;
     letterPaper.current?.scrollIntoView({ block: "start", behavior: "instant" });

@@ -1,4 +1,5 @@
 /* A few theatrical moments, with a finite particle budget and no animation library. */
+.chapter-scroll { overflow-anchor:none; }
 .birthday-magic {
   position:absolute; inset:78px 0 0; z-index:3; overflow:hidden;
   pointer-events:none; contain:layout paint;
@@ -51,8 +52,7 @@
 .birthday-name>span {
   display:inline-block; transform-origin:50% 100%;
   animation:bubu-letter-arrive 1.05s cubic-bezier(.16,1,.3,1) both;
-  background:linear-gradient(135deg,#fce6b7 12%,#deb27a 45%,#fff0d1 63%,#c89862);
-  background-clip:text; -webkit-background-clip:text; color:transparent;
+  color:var(--chapter-gold); text-shadow:0 2px 20px #e2b57112;
 }
 .name-flourish { position:absolute; left:0; bottom:-.13em; width:105%; height:.29em; overflow:visible; color:#e9c08b; }
 .name-flourish>path { stroke:currentColor; stroke-width:1.3; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1; animation:draw-love-line 1.3s ease .65s both; }
