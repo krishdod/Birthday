@@ -1,0 +1,132 @@
+/* A few theatrical moments, with a finite particle budget and no animation library. */
+.birthday-magic {
+  position:absolute; inset:78px 0 0; z-index:3; overflow:hidden;
+  pointer-events:none; contain:layout paint;
+}
+.magic-light-sweep {
+  position:absolute; inset:-15% auto -15% 0; width:75%; opacity:0;
+  background:linear-gradient(105deg,transparent 12%,#f9d79910 30%,#f8d18c66 49%,#ffedc329 65%,transparent 85%);
+  animation:golden-sweep 2.3s cubic-bezier(.22,.65,.32,1) both;
+}
+.magic-halo {
+  position:absolute; left:50%; top:30%; width:min(90vw,850px); aspect-ratio:1;
+  border-radius:50%; opacity:0;
+  background:radial-gradient(circle,#f2c17a33,transparent 64%);
+  animation:celebration-halo 2.6s ease-out both;
+}
+.magic-particle {
+  position:absolute; top:-8%; left:var(--particle-x); opacity:0;
+  width:var(--particle-size); height:var(--particle-size);
+  animation:petal-descent var(--particle-duration) cubic-bezier(.25,.4,.45,.95) var(--particle-delay) both;
+}
+.magic-particle>i { display:block; width:100%; height:100%; font-style:normal; }
+.magic-petal>i {
+  border-radius:80% 12% 70% 30%;
+  background:linear-gradient(140deg,#f8c9ac,#d59091 55%,#a75471);
+  box-shadow:inset 1px 1px 0 #ffe2bf88;
+}
+.magic-spark>i { color:#f6d296; font-size:var(--particle-size); line-height:1; text-shadow:0 0 7px #f5c27980; }
+.magic-wish .magic-particle,.magic-letter .magic-particle {
+  top:auto; bottom:-5%; animation-name:wish-ascent;
+}
+.magic-wish .magic-halo { top:42%; background:radial-gradient(circle,#f2c17a44,transparent 65%); }
+.magic-letter .magic-halo { background:radial-gradient(circle,#d894aa30,transparent 65%); }
+.magic-letter .magic-light-sweep { display:none; }
+.magic-letter .magic-particle:nth-of-type(n+13) { display:none; }
+
+/* Velvet opens over the illustration; the invitation remains readable above it. */
+.room-illustration { overflow:hidden; }
+.room-curtains { position:absolute; inset:0; display:flex; pointer-events:none; }
+.room-curtains>span {
+  width:50%; height:100%; flex:none; opacity:.96;
+  background:repeating-linear-gradient(90deg,#1b0c13 0%,#31131f 7%,#200d16 15%,#411c2a 24%,#1b0c13 33%);
+  box-shadow:inset -12px 0 26px #09040880;
+  transition:transform 1.9s cubic-bezier(.76,0,.24,1),opacity 1.9s ease;
+}
+.room-curtains>span:last-child { background-position:30px 0; box-shadow:inset 12px 0 26px #09040880; }
+.room-is-lit .room-curtains>span:first-child { transform:translateX(-103%); opacity:0; }
+.room-is-lit .room-curtains>span:last-child { transform:translateX(103%); opacity:0; }
+.room-is-lit .room-illustration>img { animation:room-depth 3.2s var(--ease-soft) both; }
+.room-copy h2>.birthday-name { position:relative; perspective:600px; padding-bottom:.1em; }
+.birthday-name>span {
+  display:inline-block; transform-origin:50% 100%;
+  animation:bubu-letter-arrive 1.05s cubic-bezier(.16,1,.3,1) both;
+  background:linear-gradient(135deg,#fce6b7 12%,#deb27a 45%,#fff0d1 63%,#c89862);
+  background-clip:text; -webkit-background-clip:text; color:transparent;
+}
+.name-flourish { position:absolute; left:0; bottom:-.13em; width:105%; height:.29em; overflow:visible; color:#e9c08b; }
+.name-flourish>path { stroke:currentColor; stroke-width:1.3; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1; animation:draw-love-line 1.3s ease .65s both; }
+.room-light-button { position:relative; isolation:isolate; overflow:hidden; }
+.room-light-button::after { content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(110deg,transparent 25%,#fff5ddaa,transparent 75%); animation:invitation-glint 5s ease-in-out infinite; }
+.room-light-button>svg { animation:invitation-flame 2.8s ease-in-out infinite; }
+
+/* A constellation answers her wish, without covering the cake or the words. */
+.wish-constellation { position:absolute; inset:-4% 0 auto; width:100%; height:88%; overflow:visible; color:#edc795; pointer-events:none; }
+.constellation-heart { stroke:currentColor; stroke-width:.22; stroke-dasharray:1; opacity:.62; animation:draw-love-line 1.6s cubic-bezier(.4,0,.2,1) both; }
+.constellation-star { opacity:.8; stroke:currentColor; stroke-width:.15; animation:constellation-appear 1.1s ease both; }
+.wish-made .cake-scene::before { animation:wish-halo 2.2s ease-out both; }
+.wish-made .wish-copy h2>em { display:inline-block; animation:cherished-words 1s var(--ease-soft) both; }
+
+/* The seal lifts, the paper slips out, and a flourish is drawn beside the letter. */
+.letter-is-opening .paper-envelope { animation:envelope-lift .9s var(--ease-soft) both; }
+.letter-is-opening .envelope-paper { animation:paper-release .9s cubic-bezier(.22,1,.36,1) both; }
+.letter-is-opening .envelope-seal { animation:seal-takeflight .55s ease-in both; }
+.letter-flourish>span { transform-origin:center; animation:flourish-grow 1s var(--ease-soft) .25s both; }
+.letter-flourish>svg { animation:cherished-words 1s var(--ease-soft) .2s both; }
+.birthday-letter-signature>strong { animation:signature-arrive 1.2s var(--ease-soft) .3s both; }
+
+/* The very first gift gets a gentle floating stage, too. */
+.gift-perspective { position:relative; isolation:isolate; animation:gift-suspended 6s ease-in-out infinite; }
+.gift-perspective::before { content:""; position:absolute; inset:-18%; z-index:-1; border-radius:50%; background:radial-gradient(ellipse,#e1a1b238,transparent 69%); animation:gift-aura 6s ease-in-out infinite; }
+.gift-stage.unwrapping .gift-perspective { animation-play-state:paused; }
+
+@keyframes golden-sweep {
+  0% { opacity:0; transform:translateX(-110%) skewX(-12deg); }
+  25% { opacity:.6; }
+  75% { opacity:.35; }
+  100% { opacity:0; transform:translateX(220%) skewX(-12deg); }
+}
+@keyframes celebration-halo {
+  0% { opacity:0; transform:translate(-50%,-50%) scale(.35); }
+  35% { opacity:.9; }
+  100% { opacity:0; transform:translate(-50%,-50%) scale(1.5); }
+}
+@keyframes petal-descent {
+  0% { opacity:0; transform:translate3d(0,-20px,0) rotate(0); }
+  15% { opacity:.85; }
+  75% { opacity:.75; }
+  100% { opacity:0; transform:translate3d(var(--particle-drift),105svh,0) rotate(var(--particle-turn)); }
+}
+@keyframes wish-ascent {
+  0% { opacity:0; transform:translate3d(0,20px,0) rotate(0) scale(.5); }
+  15% { opacity:.9; }
+  75% { opacity:.7; }
+  100% { opacity:0; transform:translate3d(var(--particle-drift),-100svh,0) rotate(var(--particle-turn)) scale(1); }
+}
+@keyframes room-depth { from { transform:scale(1.07); } to { transform:scale(1); } }
+@keyframes bubu-letter-arrive { from { opacity:0; transform:translateY(.35em) rotateX(-35deg) rotateZ(-5deg); } to { opacity:1; transform:none; } }
+@keyframes draw-love-line { from { stroke-dashoffset:1; } to { stroke-dashoffset:0; } }
+@keyframes constellation-appear { from { opacity:0; } to { opacity:.8; } }
+@keyframes wish-halo { 0% { opacity:.3; transform:scale(.75); } 45% { opacity:1; transform:scale(1.14); } 100% { opacity:.4; transform:scale(1); } }
+@keyframes cherished-words { from { opacity:0; transform:translateY(12px) scale(.96); } to { opacity:1; transform:none; } }
+@keyframes invitation-glint { 0%,55% { opacity:0; transform:translateX(-110%); } 65% { opacity:.65; } 90%,100% { opacity:0; transform:translateX(110%); } }
+@keyframes invitation-flame { 0%,100% { opacity:.7; scale:.95; } 50% { opacity:1; scale:1.12; } }
+@keyframes envelope-lift { 0% { transform:rotate(-4deg); opacity:1; } 50% { transform:translateY(-12px) rotate(0) scale(1.025); opacity:1; } 100% { transform:translateY(8px) rotate(1deg) scale(.98); opacity:0; } }
+@keyframes paper-release { 0%,18% { transform:translateY(0); } 100% { transform:translateY(-100px) rotate(-3deg); } }
+@keyframes seal-takeflight { from { opacity:1; transform:translate(-50%,-50%) scale(1); } to { opacity:0; transform:translate(-50%,-100%) rotate(-18deg) scale(1.25); } }
+@keyframes flourish-grow { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+@keyframes signature-arrive { from { opacity:0; transform:translateX(-12px); } to { opacity:1; transform:none; } }
+@keyframes gift-suspended { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-9px); } }
+@keyframes gift-aura { 0%,100% { opacity:.45; transform:scale(.93); } 50% { opacity:1; transform:scale(1.08); } }
+
+@media(max-width:700px) {
+  .birthday-magic { top:67px; }
+  .magic-particle:nth-of-type(n+17) { display:none; }
+  .room-curtains { mask-image:linear-gradient(to bottom,transparent,#000 15%,#000 90%,transparent); }
+  .room-is-lit .room-illustration>img { animation-duration:2.4s; }
+  .name-flourish { stroke-width:1.5; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .birthday-magic,.room-light-button::after { display:none !important; }
+}
+html[data-calm="true"] .birthday-magic,html[data-calm="true"] .room-light-button::after { display:none !important; }

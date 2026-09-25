@@ -166,25 +166,29 @@ export const letter = {
 
 export const birthdayChapter = {
   date: "06 OCTOBER 2026",
-  greeting: "Happy 25th birthday, my Bubu.",
-  introduction: "The world got you twenty-five years ago. Somehow, I got lucky enough to call you mine.",
+  greeting: "Twenty-five looks beautiful on you.",
+  introduction: "Flowers, a little candlelight, and all the love I could fit into one small surprise. Take your time, Anu. This moment is yours.",
   wish: "Meri wish toh tum ho, Bubu.",
   wishNote: "Whatever you wished for, I hope life brings you that and a little more. I'll be right here, cheering for you.",
+  wishes: [
+    "A heart that feels light.",
+    "Dreams with room to grow.",
+    "So many reasons to smile.",
+  ],
+  postscript: "P.S. I love you. Today, tomorrow, and every chai in between. ♡",
   letter: [
     "Happy twenty-five, my beautiful Anu.",
-    "I keep looking at that little childhood photo of you and smiling. That little girl had a whole life ahead of her. I am so grateful that somewhere along the way, your story found mine.",
-    "From our old photos to your first story for us, from the little videos I made to the day we got engaged, there is so much of you in my happiest memories. And somehow, my favourite part is still everything we haven't lived yet.",
-    "For your twenty-fifth year, I wish you a heart that feels light, dreams that have room to grow, and a thousand little reasons to smile. You deserve to feel loved on the ordinary days as much as you do today.",
-    "Bubu, tum meri favourite person ho. Meri khushi, meri partner, aur mera sabse pyaara kal. I can't promise a perfect life, but I can promise to keep choosing you, in the big moments and the smallest ones.",
-    "So make your wish, birthday girl. Mine is already here. It's you. It has always been you.",
+    "If I could wrap up a feeling for you today, it would be this: you are loved, just as you are. On your brightest days, on your tired days, and on the days when you simply need a hug.",
+    "I hope this year is kind to you. I hope you make time for the things you love, feel proud of the little wins, and find happiness in places you weren't even looking.",
+    "Bubu, tum meri favourite person ho. I want to celebrate your happiness, listen to all the little things on your mind, and keep finding ways to make you smile. Today, and on all the ordinary days after it.",
+    "So make your wish, birthday girl. Mine is already here. It's you.",
     "Happy birthday, my almost-wife. Here's to twenty-five, and all our tomorrows.",
   ],
-  scenes: [
-    { kind: "photo", src: childhood.src, alt: childhood.alt, label: "06 OCTOBER 2001", title: "The world got you.", caption: "And one day, my whole world would be you.", duration: 6000 },
-    { kind: "photo", src: "/photos/memory-08-1080.webp", alt: "A collage of our old photos together", label: "ALL THE LITTLE DAYS", title: "Then there was us.", caption: "The smiles. The silliness. The memories I keep coming back to.", duration: 6000 },
-    { kind: "photo", src: firstStory.src, alt: firstStory.alt, label: "YOUR FIRST STORY FOR US", title: "A little post. A big feeling.", caption: "Of course I kept it, Bubu.", duration: 7000 },
-    { kind: "video", src: personalFilms.videos[0].src, poster: personalFilms.videos[0].poster, alt: "A personal film Krish made from their memories", label: "MADE BY YOUR KRISH", title: "Some feelings needed a film.", caption: "A little piece of us, made with a lot of love.", duration: 18300 },
-    { kind: "photo", src: engagement.portrait.src, alt: engagement.portrait.alt, label: "25 JANUARY 2026", title: "My favourite yes.", caption: "Our forever got a beginning.", duration: 6500 },
-    { kind: "photo", src: engagement.memories[0].src, alt: engagement.memories[0].alt, label: "TWENTY-FIVE & ALL OUR TOMORROWS", title: "Still you. Always you.", caption: "Happy birthday, my favourite future.", duration: 6500 },
-  ],
 } as const;
+
+// Drop an audio file in public/audio and set src to unlock the final song step.
+export const birthdaySong: { src: string | null; title: string; dedication: string } = {
+  src: null,
+  title: "Our song",
+  dedication: "I saved one last surprise for your ears. Sit with this for a moment, Bubu. It is only for you.",
+};

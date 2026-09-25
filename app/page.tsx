@@ -4,6 +4,7 @@ import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Heart, Sparkles, Mail, 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { BIRTHDAY_AGE, birthdayState, type BirthdayState } from "@/lib/birthday";
 import { gift, engagement, childhood, oldMemories, personalFilms, reasons, notesHeading, timeline, letter, phaseCopy } from "@/lib/content";
+import { BirthdayChapter } from "@/components/birthday-chapter";
 
 const noteIcons = { smile: Smile, heart: Heart, sun: Sun, sparkles: Sparkles, together: HeartHandshake, forever: InfinityIcon };
 const timelineIcons = { birth: Sun, engagement: Heart, birthday: Star, forever: InfinityIcon };
@@ -157,7 +158,8 @@ export default function Home() {
   const reducedMotion = useReducedMotion();
   const motionOff = calm || reducedMotion;
   const [confetti, setConfetti] = useState(0);
-  const [wish, setWish] = useState(false);
+  const [chapterOpen, setChapterOpen] = useState(false);
+  const chapterTrigger = useRef<HTMLButtonElement | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const letterTrigger = useRef<HTMLButtonElement | null>(null);
   const mobileLetterTrigger = useRef<HTMLButtonElement | null>(null);
@@ -169,6 +171,18 @@ export default function Home() {
     document.documentElement.dataset.calm = String(calm);
     return () => { delete document.documentElement.dataset.calm; };
   }, [calm]);
+  useEffect(() => {
+    const update = () => {
+      document.documentElement.dataset.pageHidden = String(document.hidden);
+      if (document.hidden) document.querySelectorAll("video").forEach(video => video.pause());
+    };
+    update();
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      document.removeEventListener("visibilitychange", update);
+      delete document.documentElement.dataset.pageHidden;
+    };
+  }, []);
   useEffect(() => {
     const previewStarted = Date.now();
     setClockStarted(previewStarted);
@@ -208,19 +222,28 @@ export default function Home() {
     timer.current = setTimeout(() => setConfetti(0), 4600);
   }, [motionOff]);
   useEffect(() => {
-    if (giftState === "open" && birthday?.phase === "birthday" && !autoCelebrated.current) {
+    if (giftState === "open" && birthday?.phase === "birthday" && !letterOpen && !autoCelebrated.current) {
       autoCelebrated.current = true;
-      celebrate();
+      document.querySelectorAll("video").forEach(video => video.pause());
+      setChapterOpen(true);
     }
-  }, [birthday?.phase, celebrate, giftState]);
+  }, [birthday?.phase, giftState, letterOpen]);
   function openGift() {
     if (giftState !== "closed") return;
     if (motionOff || window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setGiftState("open"); return; }
     setGiftState("opening");
     giftTimer.current = setTimeout(() => setGiftState("open"), 780);
   }
-  function openLetter(event: MouseEvent<HTMLButtonElement>) { letterTrigger.current = event.currentTarget; setLetterOpen(true); celebrate(); }
-  return <div className={`birthday-site ${calm ? "calm" : ""}`}>
+  function openLetter(event: MouseEvent<HTMLButtonElement>) {
+    letterTrigger.current = event.currentTarget;
+    document.querySelectorAll("video").forEach(video => video.pause());
+    setLetterOpen(true); celebrate();
+  }
+  function openChapter() {
+    document.querySelectorAll("video").forEach(video => video.pause());
+    setChapterOpen(true);
+  }
+  return <div className={`birthday-site ${calm ? "calm" : ""}`} data-reading={letterOpen || chapterOpen}>
     {giftState === "open" && <a className="skip-link" href="#main">Skip to the birthday wishes</a>}
     <div className="floating-hearts" aria-hidden="true">{Array.from({ length: 12 }, (_, i) => <Heart key={i} size={10 + (i % 4) * 4} style={{ left: `${(i * 17 + 5) % 100}%`, animationDelay: `${-i * 2.7}s`, animationDuration: `${20 + (i % 5) * 3}s` }} />)}</div>
     {giftState !== "open" ? <main className={`gift-stage ${giftState === "opening" ? "unwrapping" : ""}`} aria-labelledby="gift-title">
@@ -250,14 +273,14 @@ export default function Home() {
         </div>
         <div className="hero-keepsake">
           <span className="handwritten photo-aside">{engagement.aside}</span>
-          <figure className="polaroid engagement-portrait"><img {...engagement.portrait} sizes="(max-width: 760px) 340px, (max-width: 1050px) 40vw, 470px" fetchPriority="high" /><figcaption className="polaroid-caption handwritten">{engagement.caption} <Heart size={19} aria-hidden="true" /></figcaption></figure>
+          <figure className="polaroid engagement-portrait"><img {...engagement.portrait} alt={engagement.portrait.alt} sizes="(max-width: 760px) 340px, (max-width: 1050px) 40vw, 470px" fetchPriority="high" /><figcaption className="polaroid-caption handwritten">{engagement.caption} <Heart size={19} aria-hidden="true" /></figcaption></figure>
           <span className="date-stamp" aria-hidden="true"><span>JAN</span><strong>25</strong><span>2026</span></span>
           <span className="keepsake-note"><Heart size={14} fill="currentColor" aria-hidden="true" /> Our engagement · {engagement.date}</span>
         </div>
       </section>
       <section className="countdown-section page-width" aria-label="Birthday countdown">
         <div className="countdown-intro"><span className="eyebrow">{isBirthday ? "THE WAIT IS OVER" : birthday?.phase === "after" ? "SOME THINGS DON'T END" : `COUNTING DOWN TO YOUR ${BIRTHDAY_AGE}TH`}</span><h2>{isBirthday ? "It's your day, beautiful." : birthday?.phase === "after" ? "The birthday ends. The love stays." : <>Something special is <em>almost here.</em></>}</h2><p>{before || !birthday ? "6 October 2026 · midnight, India time" : "For Anita, with all the love in the world."}</p></div>
-        {before || !birthday ? <CountdownDigits startedAt={clockStarted} /> : <div className="birthday-wish"><button className="primary-button" onClick={() => { setWish(true); celebrate(); }}><Sparkles size={18} />{wish ? "A little more birthday magic" : "Make a birthday wish"}</button><p role="status">{wish ? "Eyes closed, wish made. I'm cheering for every dream, Bubu. ♡" : "May this chapter be your happiest one yet."}</p></div>}
+        {before || !birthday ? <CountdownDigits startedAt={clockStarted} /> : <div className="birthday-wish"><button className="primary-button" ref={chapterTrigger} onClick={openChapter}><Sparkles size={18} />Your birthday chapter</button><p>A candlelit room, a little wish, and words saved just for today.</p></div>}
       </section>
       <div className="scroll-note"><span>A few things I wanted you to know</span><ArrowDown size={15} /></div>
       <section id="little-things" className="notes-section page-width" aria-labelledby="reasons-title">
@@ -267,7 +290,7 @@ export default function Home() {
       <section id="story" className="story-section" aria-labelledby="story-title"><div className="page-width story-layout">
         <div className="story-heading"><span className="eyebrow">MY FAVOURITE STORY</span><h2 id="story-title">Somehow,<br />it was always<br /><em>going to be you.</em></h2><p>And the best part?<br />We're only just getting started.</p>
           <div className="engagement-memories" aria-label="Memories from our engagement">
-            {engagement.memories.map(({ caption, ...photo }) => <figure className="memory-photo" key={photo.src}><img {...photo} sizes="(max-width: 460px) 70vw, 240px" loading="lazy" decoding="async" /><figcaption className="handwritten">{caption}</figcaption></figure>)}
+            {engagement.memories.map(({ caption, ...photo }) => <figure className="memory-photo" key={photo.src}><img {...photo} alt={photo.alt} sizes="(max-width: 460px) 70vw, 240px" loading="lazy" decoding="async" /><figcaption className="handwritten">{caption}</figcaption></figure>)}
           </div>
         </div>
         <div className="timeline">{timeline.map(event => {
@@ -292,6 +315,7 @@ export default function Home() {
         <div className="letter-signoff"><span>{letter.signoff}</span><strong className="handwritten">{letter.sender} <Heart size={20} /></strong></div>
       </DialogContent>
     </Dialog>
+    {birthday && birthday.phase !== "before" && <BirthdayChapter open={chapterOpen} onOpenChange={setChapterOpen} onCloseFocus={() => chapterTrigger.current?.focus()} motionOff={motionOff} onToggleMotion={() => setCalm(value => !value)} />}
     </div>}
     {confetti > 0 && <div key={confetti} className="confetti" aria-hidden="true">{Array.from({ length: 44 }, (_, i) => <span key={i} style={{ left: `${(i * 29 + 7) % 100}%`, animationDelay: `${(i % 9) * .1}s`, animationDuration: `${2.4 + (i % 5) * .24}s`, color: ["#9e3852", "#d98c9e", "#ba9968", "#e5b7c4"][i % 4] }}>{i % 3 === 0 ? "♡" : "✦"}</span>)}</div>}
   </div>;
